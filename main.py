@@ -5,17 +5,16 @@ import time
 
 # ---- CONFIGURACIÓN ----
 BUNNY_STORAGE_ZONE = "reelszone"
-BUNNY_API_KEY = "TU_PASSWORD_DE_BUNNY"  # Pon tu password FTP/API de Bunny
-STORAGE_URL = f"https://storage.bunnycdn.com/{BUNNY_STORAGE_ZONE}/"
+BUNNY_API_KEY = "9592b66b-3e5e-4618-84afca258d21-ccf4-4536"  # Pon tu password FTP/API de Bunny
+STORAGE_URL = "https://ny.storage.bunnycdn.com/"  # URL de la Storage Zone para listar archivos
 
-# Lista de tokens de todas tus cuentas/páginas Meta
 META_TOKENS = [
     "TOKEN_CUENTA1",
     "TOKEN_CUENTA2",
-    # agrega todos tus tokens
+    # Agrega todos tus tokens de páginas/cuentas
 ]
 
-PUBLISHED_FILE = "published.json"  # Registro de reels publicados
+PUBLISHED_FILE = "published.json"
 
 # ---- FUNCIONES ----
 def listar_reels():
@@ -25,6 +24,7 @@ def listar_reels():
         print("Error listando archivos:", r.text)
         return []
     archivos = r.json()
+    # URLs públicas que usarán Facebook/Instagram
     urls = [f"https://{BUNNY_STORAGE_ZONE}.b-cdn.net/{a['ObjectName']}" for a in archivos]
     return urls
 
@@ -49,14 +49,11 @@ def publicar_en_meta(url):
             "title": "Reel automático",
             "description": "Publicado automáticamente con Auto-Reels Bot"
         }
-        try:
-            resp = requests.post(api_url, data=data)
-            if resp.status_code == 200:
-                print(f"Publicado correctamente en token {token}")
-            else:
-                print(f"Error publicando en token {token}: {resp.text}")
-        except Exception as e:
-            print(f"Excepción publicando en token {token}: {e}")
+        resp = requests.post(api_url, data=data)
+        if resp.status_code == 200:
+            print(f"Publicado correctamente en token {token}")
+        else:
+            print(f"Error publicando en token {token}: {resp.text}")
 
 def publicar_reel():
     urls = listar_reels()
